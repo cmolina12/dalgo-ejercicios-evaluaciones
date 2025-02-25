@@ -1,34 +1,25 @@
+#- Dada una matriz de monedas $m[]$ de tamaño n y un valor objetivo T, donde $m[]$ representa las monedas de diferentes denominaciones. Usted tiene un suministro infinito de cada una de las monedas. la tarea consiste en encontrar el numero minimo de monedas necesarias para poder sumar $T$.
 
-# Dada una matriz de monedas $m[]$ de tamaño n y un valor objetivo T, donde $m[]$ representa las monedas de diferentes denominaciones. Usted tiene un suministro infinito de cada una de las monedas. la tarea consiste en encontrar el numero minimo de monedas necesarias para poder sumar $T$.
+##	- $m=[1,2,5]$
+#	- $T=11$
+#	- *La mínima cantidad de monedas es 3, coger dos de 5 y una de 1*
 
-# Ejemplo:
+monedas = [1,3,5,7,8,9,10]
+T= 11
 
-# Input: m[] = {1, 2, 3}, T = 4
-# Output: 2
-# Explicacion: Se puede obtener 4 sumando 2 y 2
-
-# Resolver con programacion dinamica
-
-def coin_change_memo(monedas, T, memo={}):
-    if T in memo:  # 🔹 Si ya calculamos dp(T), lo devolvemos en O(1)
-        return memo[T]
-
+def coin_change(monedas, T):
     if T == 0:
-        return 0
+        return 0 # Llegamos al caso base y se acaba la recursividad
     if T < 0:
         return float('inf')
-
-    min_coins = float('inf')
-
-    for moneda in monedas:  
-        num_coins = coin_change_memo(monedas, T - moneda, memo)
-        if num_coins != float('inf'):
-            min_coins = min(min_coins, 1 + num_coins)
-
-    memo[T] = min_coins  # 🔹 Guardamos el resultado
+    
+    min_coins = float('inf') # Inicializamos el minimo de monedas a infinito
+    
+    for moneda in monedas:
+        numero_monedas = coin_change(monedas, T-moneda) 
+        if numero_monedas != float('inf'):
+            min_coins = min(min_coins, 1+numero_monedas)
+        
     return min_coins
 
-m = [1, 2, 3]
-T = 95
-
-print(coin_change_memo(m, T))  # Output: 2
+print(coin_change(monedas, T)) # 3
