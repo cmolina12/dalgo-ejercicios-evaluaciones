@@ -1,23 +1,59 @@
-def max_coins(cofres):
-    if not cofres:
-        return 0
-    N = len(cofres)
-    if N == 1:
-        return cofres[0]
-    if N == 2:
-        return max(cofres[0], cofres[1])
 
-    # Inicializar DP
-    dp = [0] * N
-    dp[0] = cofres[0]
-    dp[1] = max(cofres[0], cofres[1])
 
-    for i in range(2, N):
-        dp[i] = max(dp[i-1], cofres[i] + dp[i-2])
+def max_coins(grid):
+    
+    filas = len(grid)
+    columnas = len(grid[0])
+    
+    # Inicializar dp
+    
+    dp = [[float('-inf')]*columnas for _ in range(filas)]
+    
+    # Inicializar primera columna
+    
+    for fila in range(filas):
+        if grid[fila][0] != "-1":
+            dp[fila][0] = grid[fila][0]
+            
+    # Iterar
+    
+    for j in range(1,columnas):
+        for i in range(filas):
+            
+            if grid[i][j] == "-1":
+                dp[i][j] = float('-inf')
+                continue
+            
+            # Tres opciones
+            
+            best_prev = dp[i][j-1] #Venir desde la izquierda primero
+            
+            if i > 0: # Si estamos en la fila 0 no podemos venir de arriba
+                best_prev = max(best_prev, dp[i-1][j-1]) #Mejor opcion entre venir de la izquierda y venir de arriba
+            if i < filas-1: # Si estamos en la ultima fila no podemos venir de abajo
+                best_prev = max(best_prev, dp[i+1][j-1]) # Mejor opcion entre venir de la izquierda y venir de arriba
+                
+            # Actualizamos segun la mejor opcion
+            
+            dp[i][j] = grid[i][j] + best_prev
 
-    return dp[-1]  # 🔹 Retornamos la máxima cantidad de monedas posible
 
-cofres = [5, 19, 12, 20, 22, 16, 17, 23, 21]
-max_monedas = max_coins(cofres)
+    # Retornar el mejor resultado encontrado, que estara en la ultima columna
+    
+    maximos = []
+    for i in range(filas):
+        maximos.append(dp[i][columnas-1])
+    maximo = max(maximos)
+    
+    return maximo
 
-print(f"Máximo de monedas: {max_monedas}")  # Output: 79
+# Ejemplo de uso
+
+grid = [[0, 1, 2, 3, 4],
+        
+        [5, 6, 7, 8, 9],
+        
+        [10, 11, 12, 13, 14]]
+
+max_monedas = max_coins(grid)
+print(max_monedas)

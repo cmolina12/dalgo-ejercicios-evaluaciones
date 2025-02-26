@@ -1,24 +1,23 @@
-def count_valid_numbers(N):
+def max_coins(cofres):
+    if not cofres:
+        return 0
+    N = len(cofres)
     if N == 1:
-        return 7  # No podemos tener ceros iniciales
+        return cofres[0]
+    if N == 2:
+        return max(cofres[0], cofres[1])
 
-    dp = [[0] * 8 for _ in range(N + 1)]
+    # Inicializar DP
+    dp = [0] * N
+    dp[0] = cofres[0]
+    dp[1] = max(cofres[0], cofres[1])
 
-    # Caso base: Un solo dígito (sin ceros iniciales)
-    for d in range(1, 8):
-        dp[1][d] = 1
+    for i in range(2, N):
+        dp[i] = max(dp[i-1], cofres[i] + dp[i-2])
 
-    # Llenamos la tabla DP
-    for i in range(2, N + 1):  # Desde 2 hasta N dígitos
-        for d in range(8):  # Último dígito del número
-            for prev in range(8):  # Posibles valores previos
-                if not (d == 0 and prev == 0) and not (d == 4 and prev == 4):
-                    dp[i][d] += dp[i - 1][prev]
+    return dp[-1]  # 🔹 Retornamos la máxima cantidad de monedas posible
 
-    # Sumamos todos los valores dp[N][d] para obtener la respuesta final
-    return sum(dp[N])
+cofres = [5, 19, 12, 20, 22, 16, 17, 23, 21]
+max_monedas = max_coins(cofres)
 
-# Ejemplo de uso
-N = 10
-print(count_valid_numbers(N))  # Imprime la cantidad de números válidos
-
+print(f"Máximo de monedas: {max_monedas}")  # Output: 79
