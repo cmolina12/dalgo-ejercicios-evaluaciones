@@ -37,3 +37,8 @@ origen = 'A'
 resultado = dijkstra(adj, origen)
 
 print(resultado)
+
+
+for node in adj:
+    print(node)
+
