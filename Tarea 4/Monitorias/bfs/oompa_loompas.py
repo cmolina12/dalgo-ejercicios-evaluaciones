@@ -34,3 +34,26 @@ grafo = {
 
 inicial = 'A'
 print(bfs_oompaloompa(grafo, inicial))  # Debería retornar True
+
+
+
+def oompa_loompas(grafo, inicial):
+    color = {node: 0 for node in grafo}
+    
+    color[inicial] = 1
+    queue = deque()
+    
+    while queue:
+        current = queue.popleft()
+        
+        for vecino in grafo[current]:
+            if color == 0:
+                color[vecino] = -color[current]
+                queue.append(vecino)
+            elif color[current] == color[vecino]:
+                return False
+            
+    if 0 in color.values():
+        return False
+    
+    return True
