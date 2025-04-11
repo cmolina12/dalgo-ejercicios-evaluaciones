@@ -1,6 +1,6 @@
 
 
-def georgefloyd(grafo, n):
+def problema_C(grafo, n):
     
     distancia = [[float('inf')]*n for _ in range(n)]
     
